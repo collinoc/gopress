@@ -136,8 +136,8 @@ func decompressFile(file string) {
 }
 
 func indexOf(a []string, item string) int {
-	for idx, str := range a {
-		if item == str {
+	for idx := range a {
+		if item == a[idx] {
 			return idx
 		}
 	}
@@ -145,8 +145,8 @@ func indexOf(a []string, item string) int {
 }
 
 func contains(a []string, item string) bool {
-	for _, str := range a {
-		if item == str {
+	for idx := range a {
+		if item == a[idx] {
 			return true
 		}
 	}
@@ -177,126 +177,3 @@ func handleCommandLine() (Mode, string, error) {
 
 	return mode, os.Args[2], nil
 }
-
-// type BitWriter struct {
-// 	stream  []byte
-// 	buffer  byte
-// 	bufSize int
-// }
-
-// func NewBitWriter() *BitWriter {
-// 	return &BitWriter{
-// 		[]byte{},
-// 		0x00,
-// 		0,
-// 	}
-// }
-
-// func (bw *BitWriter) writeToFile(fileName string) {
-// 	// Finalize buffer
-// 	if bw.bufSize > 0 {
-// 		bw.stream = append(bw.stream, bw.buffer)
-// 		bw.buffer = 0x00
-// 		bw.bufSize = 0
-// 	}
-
-// 	err := ioutil.WriteFile(fileName, bw.stream, 0644)
-
-// 	if err != nil {
-// 		fmt.Printf("File write error: %s\n", err)
-// 	}
-// }
-
-// func (bw *BitWriter) writeStr(str string) {
-// 	bw.stream = append(bw.stream, str...)
-// }
-
-// func (bw *BitWriter) writeBits(bits int, num int) {
-// 	for i := num - 1; i >= 0; i-- {
-// 		bw.writeBit(!((1<<i)&bits == 0))
-// 	}
-// }
-
-// func (bw *BitWriter) writeBit(bit bool) {
-// 	if bw.bufSize == 8 {
-// 		bw.stream = append(bw.stream, bw.buffer)
-// 		bw.buffer = 0x00
-// 		bw.bufSize = 0
-// 	}
-
-// 	if bit {
-// 		bw.buffer |= 1 << (8 - bw.bufSize - 1)
-// 	}
-
-// 	bw.bufSize++
-// }
-
-// type BitReader struct {
-// 	stream  string
-// 	buffer  byte
-// 	bufSize int
-// }
-
-// func NewBitReader(fileName string) *BitReader {
-// 	fileBuf, err := ioutil.ReadFile(fileName)
-
-// 	if err != nil {
-// 		fmt.Printf("File read error: %s\n", err)
-// 		return nil
-// 	}
-
-// 	return &BitReader{
-// 		string(fileBuf),
-// 		0x00,
-// 		0,
-// 	}
-// }
-
-// func (br *BitReader) hasNext() bool {
-// 	return len(br.stream) > 0
-// }
-
-// func (br *BitReader) readBit() bool {
-// 	if br.bufSize == 0 {
-// 		br.buffer = br.readByte()
-// 		br.bufSize = 8
-// 	}
-
-// 	bit := !(br.buffer&(1<<(br.bufSize-1)) == 0)
-
-// 	br.bufSize--
-
-// 	return bit
-// }
-
-// func (br *BitReader) readBits(numBits int) int {
-// 	bits := 0
-
-// 	for i := 0; i < numBits; i++ {
-// 		bits <<= 1
-// 		if br.readBit() {
-// 			bits |= 1
-// 		}
-// 	}
-
-// 	return bits
-// }
-
-// func (br *BitReader) peekByte() byte {
-// 	if len(br.stream) > 0 {
-// 		return br.stream[0]
-// 	}
-
-// 	return 0x00
-// }
-
-// func (br *BitReader) readByte() byte {
-// 	if len(br.stream) == 0 {
-// 		return 0x00
-// 	}
-
-// 	byteRead := br.stream[0]
-// 	br.stream = br.stream[1:]
-
-// 	return byteRead
-// }
